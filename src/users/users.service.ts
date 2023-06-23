@@ -11,6 +11,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ReturnUserDto } from 'src/dto/returnUser.dto';
 import { ResultDto } from 'src/dto/result.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -50,6 +51,11 @@ export class UsersService {
     }
 
     const updateActive = { $set: { activebit: true } };
+
+    createUserDto.password = bcrypt.hashSync(
+      createUserDto.password,
+      +process.env.SALT,
+    );
 
     const newUser = new this.userModel(createUserDto);
     return await newUser.save();
