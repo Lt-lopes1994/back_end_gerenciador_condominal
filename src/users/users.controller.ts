@@ -11,6 +11,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ResultDto } from 'src/dto/result.dto';
+import { ReturnUserDto } from 'src/dto/returnUser.dto';
 
 @Controller('users')
 export class UsersController {
@@ -22,27 +23,27 @@ export class UsersController {
 
     return {
       message: 'Usuário cadastrado com sucesso',
-      status: true,
+      status: 200,
     };
   }
 
   @Get()
-  findAll() {
+  async findAll(): Promise<ReturnUserDto[]> {
     return this.usersService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  @Get('/:id')
+  async findOne(@Param('id') id: string) {
+    return this.usersService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch('/:id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+    return this.usersService.update(id, updateUserDto);
   }
 
-  @Delete(':id')
+  @Delete('/:id')
   remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+    return this.usersService.remove(id);
   }
 }

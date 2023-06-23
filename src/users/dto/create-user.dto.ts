@@ -5,4 +5,5 @@ export class CreateUserDto {
   readonly passwordConfirm: string;
   readonly door: number;
   readonly tower: string;
+  readonly activebit: boolean;
 }
