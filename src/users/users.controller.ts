@@ -6,16 +6,24 @@ import {
   Patch,
   Param,
   Delete,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ResultDto } from 'src/dto/result.dto';
 import { ReturnUserDto } from 'src/dto/returnUser.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { AuthService } from '../auth/auth.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private authService: AuthService,
+  ) {}
 
   @Post()
   async create(@Body() data: CreateUserDto): Promise<ResultDto> {
@@ -27,7 +35,14 @@ export class UsersController {
     };
   }
 
-  @Get()
+  @UseGuards(AuthGuard('local'))
+  @Post('login')
+  async login(@Request() req) {
+    return this.authService.login(req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('listar')
   async findAll(): Promise<ReturnUserDto[]> {
     return this.usersService.findAll();
   }
