@@ -1,15 +1,41 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateNewsDto } from './dto/create-news.dto';
 import { UpdateNewsDto } from './dto/update-news.dto';
+import { Model } from 'mongoose';
+import { News } from './entities/news.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { ResultDto } from 'src/dto/result.dto';
 
 @Injectable()
 export class NewsService {
-  create(createNewsDto: CreateNewsDto) {
-    return 'This action adds a new news';
+  constructor(@InjectModel('News') private readonly newsModel: Model<News>) {}
+
+  async create(createNewsDto: CreateNewsDto): Promise<News> {
+    const { ULRimage, alt, content, title } = createNewsDto;
+
+    if (!ULRimage) {
+      throw new BadRequestException('URL da imagem não informada');
+    }
+
+    if (!alt) {
+      throw new BadRequestException('Descrição da imagem não informada');
+    }
+
+    if (!content) {
+      throw new BadRequestException('Conteúdo da notícia não informado');
+    }
+
+    if (!title) {
+      throw new BadRequestException('Título da notícia não informado');
+    }
+
+    const newNews = new this.newsModel(createNewsDto);
+
+    return newNews.save();
   }
 
   findAll() {
-    return `This action returns all news`;
+    return this.newsModel.find().exec();
   }
 
   findOne(id: number) {
