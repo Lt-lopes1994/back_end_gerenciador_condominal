@@ -2,6 +2,14 @@
 /dist
 /node_modules
 
+<<<<<<< HEAD
+#env files
+/.env
+=======
+#env
+.env
+>>>>>>> dd5945475b7c0c4fbb1fe4919d51e02806c9fd73
+
 # Logs
 logs
 *.log
@@ -10,9 +18,6 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
-
-#env
-.env
 
 # OS
 .DS_Store

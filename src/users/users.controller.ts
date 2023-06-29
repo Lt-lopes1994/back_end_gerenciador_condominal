@@ -41,6 +41,11 @@ export class UsersController {
     return this.authService.login(req.user);
   }
 
+  @Get('teste')
+  async teste() {
+    return 'teste';
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get('listar')
   async findAll(): Promise<ReturnUserDto[]> {
@@ -52,11 +57,13 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch('/:id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete('/:id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
