@@ -35,5 +35,5 @@ export class CreateNewsDto {
     description: 'Id do usuário que criou a notícia. Id do mongoose',
     example: '1649dba614ebd94fde3399582',
   })
-  userId: string;
+  user: string;
 }

@@ -25,23 +25,27 @@ export class NewsController {
     return this.newsService.create(createNewsDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.newsService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.newsService.findOne(+id);
+    return this.newsService.findOne(id);
   }
 
-  @Patch(':id')
+  @UseGuards(JwtAuthGuard)
+  @Patch('/:id')
   update(@Param('id') id: string, @Body() updateNewsDto: UpdateNewsDto) {
-    return this.newsService.update(+id, updateNewsDto);
+    return this.newsService.update(id, updateNewsDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.newsService.remove(+id);
+    return this.newsService.remove(id);
   }
 }
