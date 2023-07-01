@@ -14,5 +14,5 @@ export const UserSchema = new mongoose.Schema(
     role: { type: String, required: true, default: 'user' },
     activebit: { type: Boolean, required: true, default: true },
   },
-  { timestamps: true },
+  { timestamps: true, collection: 'users' },
 );
