@@ -15,7 +15,7 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
+  constructor(@InjectModel('User') private readonly userModel: Model<User>) { }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const email = createUserDto.email;
@@ -149,6 +149,27 @@ export class UsersService {
       message: 'Usuário atualizado com sucesso',
       status: 200,
     };
+  }
+
+  async updateRole(id: string, userRole: UpdateUserDto): Promise<ResultDto> {
+    const foundUser = await this.userModel.findOne({ _id: id }).exec()
+
+    if (!foundUser) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+
+    if (userRole.role === 'admin' || userRole.role === 'user') {
+      foundUser.role = userRole.role;
+    } else {
+      throw new BadRequestException('Essa não é uma role válida');
+    }
+
+    await foundUser.save();
+
+    return {
+      message: 'Role atualizada com sucesso',
+      status: 200,
+    }
   }
 
   async remove(id: string): Promise<ResultDto> {
