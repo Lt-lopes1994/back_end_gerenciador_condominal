@@ -28,6 +28,7 @@
     "@nestjs/mongoose": "^10.0.0",
     "@nestjs/passport": "^10.0.0",
     "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/swagger": "^7.0.12",
     "@types/mongoose": "^5.11.97",
     "bcrypt": "^5.1.0",
     "moment-timezone": "^0.5.43",

@@ -88,7 +88,7 @@ export class UsersService {
     return foundUser;
   }
 
-  async findOne(id: string): Promise<ReturnUserDto | undefined> {
+  async findOneId(id: string): Promise<ReturnUserDto | undefined> {
     const foundUser = await this.userModel.findOne({ _id: id }).exec();
 
     if (!foundUser) {
@@ -152,7 +152,7 @@ export class UsersService {
   }
 
   async remove(id: string): Promise<ResultDto> {
-    const foundUser = this.findOne(id);
+    const foundUser = this.findOneId(id);
 
     if (!foundUser) {
       throw new NotFoundException('Usuário não encontrado');
