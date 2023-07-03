@@ -6,6 +6,6 @@ import { CreateCondominiumDto } from './create-condominium.dto';
 //! Isso é útil ao criar DTOs para atualizar entidades.
 export class UpdateCondominiumDto extends PartialType(CreateCondominiumDto) {
   name?: string;
-
+  user?: string;
   activebit?: boolean;
 }
