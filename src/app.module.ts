@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 import { NewsModule } from './news/news.module';
 import { TokenModule } from './token/token.module';
+import { CondominiumModule } from './condominium/condominium.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { TokenModule } from './token/token.module';
     AuthModule,
     TokenModule,
     NewsModule,
+    CondominiumModule,
   ],
   controllers: [],
   providers: [],

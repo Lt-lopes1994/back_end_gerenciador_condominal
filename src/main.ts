@@ -8,10 +8,11 @@ async function bootstrap() {
   Date.prototype.toJSON = function (): any {
     return momentTimezone(this)
       .tz('America/Sao_Paulo')
-      .format('YYYY-MM-DD HH:mm:ss.SSS');
+      .format('YYYY-MM-DD HH:mm:ss');
   };
 
   const PORT = 8000;
+
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
