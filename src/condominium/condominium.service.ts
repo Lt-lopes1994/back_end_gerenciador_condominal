@@ -1,10 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateCondominiumDto } from './dto/create-condominium.dto';
 import { UpdateCondominiumDto } from './dto/update-condominium.dto';
 import { UsersService } from 'src/users/users.service';
 import { Condominium } from './entities/condominium.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { ResultDto } from 'src/dto/result.dto';
 
 //* O modulo service serve para fazer as regras de negocio, onde todos os dados são validados e tratados antes de serem enviados para o banco de dados
 //* O modulo service é responsável por fazer a comunicação com o banco de dados
@@ -43,6 +48,12 @@ export class CondominiumService {
 
     const foundUser = await this.usersService.findOneId(user);
 
+    const foundCondominiun = await this.findOneByName(name);
+
+    if (foundCondominiun) {
+      throw new BadRequestException('Condomínio já cadastrado');
+    }
+
     const newCondominium = new this.data(createCondominiumDto);
 
     console.log(newCondominium);
@@ -50,19 +61,76 @@ export class CondominiumService {
     return newCondominium.save();
   }
 
-  findAll() {
-    return `This action returns all condominium`;
+  async findAll(): Promise<Condominium[]> {
+    const foundCondominiun = await this.data
+      .find()
+      .populate({ path: 'user', select: 'name -_id', model: 'User' })
+      .exec();
+
+    return foundCondominiun;
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} condominium`;
+  async findOne(id: string): Promise<Condominium> {
+    const foundCondominiun = await this.data
+      .findById(id)
+      .populate({
+        path: 'user',
+        select: 'name -_id',
+        model: 'User',
+      })
+      .exec();
+
+    return foundCondominiun;
   }
 
-  update(id: string, updateCondominiumDto: UpdateCondominiumDto) {
-    return `This action updates a #${id} condominium`;
+  async findOneNoPopulate(id: string): Promise<Condominium> {
+    const foundCondominiun = await this.data.findById(id).exec();
+
+    return foundCondominiun;
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} condominium`;
+  async findOneByName(name: string): Promise<Condominium> {
+    const foundCondominiun = await this.data.findOne({ name }).exec();
+
+    return foundCondominiun;
+  }
+
+  async update(
+    id: string,
+    updateCondominiumDto: UpdateCondominiumDto,
+  ): Promise<ResultDto> {
+    const { name, user } = updateCondominiumDto;
+
+    const foundUser = await this.usersService.findOneId(user);
+    const idFoundUser = foundUser.id;
+
+    const foundCondominiun = await this.findOneNoPopulate(id);
+    if (idFoundUser !== foundUser.id) {
+      throw new BadRequestException(
+        'Condomínio não pertence ao usuário. Operação não permitida',
+      );
+    }
+
+    await foundCondominiun.save();
+
+    return {
+      message: 'Condomínio atualizado com sucesso',
+      status: 200,
+    };
+  }
+
+  async remove(id: string): Promise<ResultDto> {
+    const foundCondominiun = await this.findOneNoPopulate(id);
+
+    if (!foundCondominiun) {
+      throw new NotFoundException('Condomínio não encontrado');
+    }
+
+    await foundCondominiun.updateOne({ activebit: false });
+
+    return {
+      message: 'Condomínio removido com sucesso',
+      status: 200,
+    };
   }
 }
