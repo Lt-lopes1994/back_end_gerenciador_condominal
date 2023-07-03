@@ -102,6 +102,7 @@ export class UsersService {
         email: foundUser.email,
         door: foundUser.door,
         tower: foundUser.tower,
+        role: foundUser.role
       };
 
       return returnUser;
@@ -152,19 +153,13 @@ export class UsersService {
   }
 
   async updateRole(id: string, userRole: UpdateUserDto): Promise<ResultDto> {
-    const foundUser = await this.userModel.findOne({ _id: id }).exec()
-
-    if (!foundUser) {
-      throw new NotFoundException('Usuário não encontrado');
-    }
+    await this.findOneId(id);
 
     if (userRole.role === 'admin' || userRole.role === 'user') {
-      foundUser.role = userRole.role;
+      await this.userModel.updateOne({ _id: id }, { $set: { role: userRole.role } });
     } else {
       throw new BadRequestException('Essa não é uma role válida');
     }
-
-    await foundUser.save();
 
     return {
       message: 'Role atualizada com sucesso',
