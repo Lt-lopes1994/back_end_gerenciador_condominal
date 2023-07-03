@@ -41,7 +41,14 @@ export class NewsService {
   }
 
   async findAll(): Promise<News[]> {
-    return await this.newsModel.find().exec();
+    return await this.newsModel
+      .find()
+      .populate({
+        path: 'user',
+        select: 'name -_id',
+        model: 'User',
+      })
+      .exec();
   }
 
   async findOne(id: string): Promise<News> {
@@ -49,7 +56,7 @@ export class NewsService {
       .findById(id)
       .populate({
         path: 'user',
-        select: 'name',
+        select: 'name -_id',
         model: 'User',
       })
       .exec();
