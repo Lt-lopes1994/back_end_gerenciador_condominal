@@ -2,11 +2,11 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateAdministratorDto {
     @ApiProperty({
-        type: 'string',
+        type: 'number',
         description: 'CNPJ da administradora',
-        example: '000111222000133',
+        example: '00.000.000/0001-00',
     })
-    readonly cnpj: string;
+    readonly cnpj: number;
 
     @ApiProperty({
         type: 'string',
@@ -23,25 +23,25 @@ export class CreateAdministratorDto {
     readonly email: string;
 
     @ApiProperty({
-        type: 'string',
+        type: 'number',
         description: 'Inscrição Estadual',
-        example: '111222333444'
+        example: '000.000.000.000'
     })
-    readonly ie: string;
+    readonly ie: number;
 
     @ApiProperty({
-        type: 'string',
+        type: 'number',
         description: 'Telefone para contato',
-        example: '11999999999'
+        example: '(11) 9 9999-9999'
     })
-    readonly phone: string;
+    readonly phone: number;
 
     @ApiProperty({
-        type: 'string',
+        type: 'number',
         description: 'WhattsApp para contato',
-        example: '11999999999'
+        example: '(11) 9 9999-9999'
     })
-    readonly whattsApp: string;
+    readonly whattsApp: number;
 
     readonly activebit: boolean;
 }

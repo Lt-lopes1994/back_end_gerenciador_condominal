@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose';
 export const AdministratorSchema = new mongoose.Schema(
     {
         cnpj: {
-            type: String,
+            type: Number,
             require: true,
             unique: true
         },
@@ -14,17 +14,17 @@ export const AdministratorSchema = new mongoose.Schema(
             unique: true
         },
         ie: {
-            type: String,
+            type: Number,
             required: true,
             unique: true
         },
-        phone: { type: String, require: true },
-        whattsApp: { type: String, require: false },
+        phone: { type: Number, require: true },
+        whattsApp: { type: Number, require: false },
         activebit: {
             type: Boolean,
             required: true,
             default: true
         }
     },
-    { timestamps: true, collection: 'administrator' }
+    { timestamps: true, collection: 'administrators' }
 );
