@@ -35,12 +35,12 @@ export class CondominiumController {
     return this.condominiumService.findAll();
   }
 
-  @Get(':id')
+  @Get('/:id')
   findOne(@Param('id') id: string) {
     return this.condominiumService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch('/:id')
   update(
     @Param('id') id: string,
     @Body() updateCondominiumDto: UpdateCondominiumDto,
@@ -48,7 +48,7 @@ export class CondominiumController {
     return this.condominiumService.update(id, updateCondominiumDto);
   }
 
-  @Delete(':id')
+  @Delete('/:id')
   remove(@Param('id') id: string) {
     return this.condominiumService.remove(id);
   }
