@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { NewsModule } from './news/news.module';
 import { TokenModule } from './token/token.module';
 import { CondominiumModule } from './condominium/condominium.module';
+import { AdministratorModule } from './administrator/administrator.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { CondominiumModule } from './condominium/condominium.module';
     TokenModule,
     NewsModule,
     CondominiumModule,
+    AdministratorModule,
   ],
   controllers: [],
   providers: [],
