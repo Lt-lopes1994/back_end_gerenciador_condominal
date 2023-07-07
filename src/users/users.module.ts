@@ -5,7 +5,6 @@ import { UsersService } from './users.service';
 import { UserSchema } from './entities/user.schema';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from 'src/auth/auth.module';
-import { CondominiumModule } from 'src/condominium/condominium.module';
 
 //* O forwardRef é necessário para que o AuthModule possa importar o UsersModule e se torna uma dependência cíclica podendo ser retirada do AppModule
 @Module({
@@ -18,4 +17,4 @@ import { CondominiumModule } from 'src/condominium/condominium.module';
   providers: [UsersService],
   exports: [UsersService],
 })
-export class UsersModule {}
+export class UsersModule { }

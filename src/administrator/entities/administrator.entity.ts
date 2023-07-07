@@ -7,7 +7,8 @@ export interface Administrator extends Document {
     email: string;
     ie: number;
     phone: number;
-    whattsApp: number;
+    whatsApp?: number;
+    website?: string;
     activebit: boolean;
     readonly createdAt: Date;
     readonly updatedAt: Date;

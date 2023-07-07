@@ -38,10 +38,17 @@ export class CreateAdministratorDto {
 
     @ApiProperty({
         type: 'number',
-        description: 'WhattsApp para contato',
+        description: 'WhatsApp para contato',
         example: '(11) 9 9999-9999'
     })
-    readonly whattsApp: number;
+    readonly whatsApp: number;
+
+    @ApiProperty({
+        type: 'string',
+        description: 'Site da administradora',
+        example: 'www.exemplo.com.br'
+    })
+    readonly website: string;
 
     readonly activebit: boolean;
 }

@@ -7,6 +7,7 @@ export class UpdateAdministratorDto extends PartialType(CreateAdministratorDto) 
     email?: string;
     ie?: number;
     phone?: number;
-    whattsApp?: number;
+    whatsApp?: number;
+    website?: string;
     activebit?: boolean;
 }

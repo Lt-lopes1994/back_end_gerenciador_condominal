@@ -2,19 +2,30 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { AdministratorService } from './administrator.service';
 import { CreateAdministratorDto } from './dto/create-administrator.dto';
 import { UpdateAdministratorDto } from './dto/update-administrator.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { ResultDto } from 'src/dto/result.dto';
+import { ReturnAdministratorDto } from 'src/dto/returnAdministrator.dto';
 
-@Controller('administrator')
+@ApiTags('administrators')
+@Controller('administrators')
 export class AdministratorController {
-  constructor(private readonly administratorService: AdministratorService) {}
+  constructor(
+    private readonly administratorService: AdministratorService
+  ) { }
 
   @Post()
-  create(@Body() createAdministratorDto: CreateAdministratorDto) {
-    return this.administratorService.create(createAdministratorDto);
+  async create(@Body() data: CreateAdministratorDto): Promise<ResultDto> {
+    await this.administratorService.create(data);
+
+    return {
+      message: 'Administradora cadastrada com sucesso',
+      status: 200,
+    };
   }
 
-  @Get()
-  findAll() {
-    return this.administratorService.findAll();
+  @Get('listar')
+  async findAll(): Promise<ReturnAdministratorDto[]> {
+    return await this.administratorService.findAll();
   }
 
   @Get(':id')

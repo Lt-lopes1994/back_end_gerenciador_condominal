@@ -19,7 +19,8 @@ export const AdministratorSchema = new mongoose.Schema(
             unique: true
         },
         phone: { type: Number, require: true },
-        whattsApp: { type: Number, require: false },
+        whatsApp: { type: Number, require: false },
+        website: { type: String, require: false },
         activebit: {
             type: Boolean,
             required: true,
