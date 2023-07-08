@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Administrator } from './entities/administrator.entity';
 import { Model } from 'mongoose';
 import { ReturnAdministratorDto } from 'src/dto/returnAdministrator.dto';
+import { ResultDto } from 'src/dto/result.dto';
 
 @Injectable()
 export class AdministratorService {
@@ -95,8 +96,47 @@ export class AdministratorService {
     return returnAdministrator;
   }
 
-  update(id: number, updateAdministratorDto: UpdateAdministratorDto) {
-    return `This action updates a #${id} administrator`;
+  async update(id: string, updateAdministratorDto: UpdateAdministratorDto): Promise<ResultDto> {
+    const foundAdministrator = await this.administratorModel.findOne({ _id: id });
+
+    if (!foundAdministrator) {
+      throw new NotFoundException('Administradora não encontrada');
+    }
+
+    if (updateAdministratorDto.cnpj) {
+      foundAdministrator.cnpj = updateAdministratorDto.cnpj;
+    }
+
+    if (updateAdministratorDto.contactPerson) {
+      foundAdministrator.contactPerson = updateAdministratorDto.contactPerson;
+    }
+
+    if (updateAdministratorDto.email) {
+      foundAdministrator.email = updateAdministratorDto.email;
+    }
+
+    if (updateAdministratorDto.ie) {
+      foundAdministrator.ie = updateAdministratorDto.ie;
+    }
+
+    if (updateAdministratorDto.phone) {
+      foundAdministrator.phone = updateAdministratorDto.phone;
+    }
+
+    if (updateAdministratorDto.whatsApp) {
+      foundAdministrator.whatsApp = updateAdministratorDto.whatsApp;
+    }
+
+    if (updateAdministratorDto.website) {
+      foundAdministrator.website = updateAdministratorDto.website;
+    }
+
+    await foundAdministrator.save();
+
+    return {
+      message: 'Administradora atualizada com sucesso',
+      status: 200,
+    };
   }
 
   remove(id: number) {

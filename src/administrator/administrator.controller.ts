@@ -35,7 +35,7 @@ export class AdministratorController {
 
   @Patch('/:id')
   update(@Param('id') id: string, @Body() updateAdministratorDto: UpdateAdministratorDto) {
-    return this.administratorService.update(+id, updateAdministratorDto);
+    return this.administratorService.update(id, updateAdministratorDto);
   }
 
   @Delete(':id')
