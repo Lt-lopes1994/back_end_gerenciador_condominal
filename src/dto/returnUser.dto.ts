@@ -5,4 +5,5 @@ export interface ReturnUserDto {
   door: number;
   tower: string;
   activebit?: boolean;
+  role?: string;
 }
