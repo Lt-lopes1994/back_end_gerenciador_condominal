@@ -139,7 +139,16 @@ export class AdministratorService {
     };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} administrator`;
+  async remove(id: string): Promise<ResultDto> {
+    await this.findOneId(id);
+
+    const updateActive = { $set: { activebit: false } };
+
+    await this.administratorModel.updateOne({ _id: id }, updateActive).exec();
+
+    return {
+      message: 'Usuário desativado com sucesso',
+      status: 200,
+    };
   }
 }

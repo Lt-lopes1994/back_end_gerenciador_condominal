@@ -38,8 +38,8 @@ export class AdministratorController {
     return this.administratorService.update(id, updateAdministratorDto);
   }
 
-  @Delete(':id')
+  @Delete('/:id')
   remove(@Param('id') id: string) {
-    return this.administratorService.remove(+id);
+    return this.administratorService.remove(id);
   }
 }
