@@ -25,7 +25,7 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private authService: AuthService,
-  ) {}
+  ) { }
 
   @Post()
   async create(@Body() data: CreateUserDto): Promise<ResultDto> {
@@ -63,6 +63,12 @@ export class UsersController {
   @Patch('/:id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('admin/:id')
+  updateRole(@Param('id') id: string, @Body() userRole: UpdateUserDto) {
+    return this.usersService.updateRole(id, userRole);
   }
 
   @UseGuards(JwtAuthGuard)
