@@ -10,7 +10,7 @@ import { ReturnAdministratorDto } from 'src/dto/returnAdministrator.dto';
 export class AdministratorService {
   constructor(@InjectModel('Administrator') private readonly administratorModel: Model<Administrator>) { }
 
-  async create(createAdministratorDto: CreateAdministratorDto) {
+  async create(createAdministratorDto: CreateAdministratorDto): Promise<Administrator> {
     const cnpj = createAdministratorDto.cnpj;
 
     if (!cnpj) {
@@ -44,7 +44,7 @@ export class AdministratorService {
     return await newAdministrator.save();
   }
 
-  async findAll() {
+  async findAll(): Promise<ReturnAdministratorDto[]> {
     const foundAdministrators = await this.administratorModel.find()
       .where({ activebit: true })
       .exec();
@@ -73,8 +73,26 @@ export class AdministratorService {
     return foundAdministrators;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} administrator`;
+  async findOneId(id: string): Promise<ReturnAdministratorDto | undefined> {
+    const foundAdministrator = await this.administratorModel.findOne({ _id: id })
+      .exec();
+
+    if (!foundAdministrator) {
+      throw new NotFoundException('Administradora não encontrada');
+    }
+
+    const returnAdministrator: ReturnAdministratorDto = {
+      id: foundAdministrator.id,
+      cnpj: foundAdministrator.cnpj,
+      contactPerson: foundAdministrator.contactPerson,
+      email: foundAdministrator.email,
+      ie: foundAdministrator.ie,
+      phone: foundAdministrator.phone,
+      whatsApp: foundAdministrator.whatsApp,
+      website: foundAdministrator.website
+    };
+
+    return returnAdministrator;
   }
 
   update(id: number, updateAdministratorDto: UpdateAdministratorDto) {

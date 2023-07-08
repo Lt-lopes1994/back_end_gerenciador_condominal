@@ -28,12 +28,12 @@ export class AdministratorController {
     return await this.administratorService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.administratorService.findOne(+id);
+  @Get('/:id')
+  async findOne(@Param('id') id: string) {
+    return await this.administratorService.findOneId(id);
   }
 
-  @Patch(':id')
+  @Patch('/:id')
   update(@Param('id') id: string, @Body() updateAdministratorDto: UpdateAdministratorDto) {
     return this.administratorService.update(+id, updateAdministratorDto);
   }
