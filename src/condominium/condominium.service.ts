@@ -27,7 +27,7 @@ export class CondominiumService {
   constructor(
     @InjectModel('Condominium') private readonly data: Model<Condominium>,
     private readonly usersService: UsersService,
-  ) {}
+  ) { }
 
   async create(
     createCondominiumDto: CreateCondominiumDto,
@@ -86,6 +86,10 @@ export class CondominiumService {
   async findOneNoPopulate(id: string): Promise<Condominium> {
     const foundCondominiun = await this.data.findById(id).exec();
 
+    if (!foundCondominiun) {
+      throw new NotFoundException('Condominio não encontrado');
+    }
+
     return foundCondominiun;
   }
 
@@ -101,14 +105,22 @@ export class CondominiumService {
   ): Promise<ResultDto> {
     const { name, user } = updateCondominiumDto;
 
-    const foundUser = await this.usersService.findOneId(user);
-    const idFoundUser = foundUser.id;
+    // if (!user) {
+    //   throw new BadRequestException('Usuário não informado');
+    // }
 
     const foundCondominiun = await this.findOneNoPopulate(id);
-    if (idFoundUser !== foundUser.id) {
-      throw new BadRequestException(
-        'Condomínio não pertence ao usuário. Operação não permitida',
-      );
+
+    // const foundUser = await this.usersService.findOneId(user);
+
+    // if (foundCondominiun.user !== foundUser.id) {
+    //   throw new BadRequestException(
+    //     'Condomínio não pertence ao usuário. Operação não permitida',
+    //   );
+    // }
+
+    if (name) {
+      foundCondominiun.name = name;
     }
 
     await foundCondominiun.save();
