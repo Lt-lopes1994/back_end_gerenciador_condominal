@@ -103,7 +103,7 @@ export class CondominiumService {
     id: string,
     updateCondominiumDto: UpdateCondominiumDto,
   ): Promise<ResultDto> {
-    const { name, user } = updateCondominiumDto;
+    const { user } = updateCondominiumDto;
 
     // if (!user) {
     //   throw new BadRequestException('Usuário não informado');
@@ -121,6 +121,9 @@ export class CondominiumService {
 
     if (name) {
       foundCondominiun.name = name;
+    }
+
+    if (!foundCondominiun) {
     }
 
     await foundCondominiun.save();
