@@ -15,7 +15,7 @@ import { NewsModule } from 'src/news/news.module';
     ConfigModule.forRoot({ envFilePath: '.env' }),
     JwtModule.register({
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '1d' },
     }),
     UsersModule,
     PassportModule,

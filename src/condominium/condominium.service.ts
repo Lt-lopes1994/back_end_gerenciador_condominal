@@ -99,7 +99,7 @@ export class CondominiumService {
     id: string,
     updateCondominiumDto: UpdateCondominiumDto,
   ): Promise<ResultDto> {
-    const { name, user } = updateCondominiumDto;
+    const { user } = updateCondominiumDto;
 
     const foundUser = await this.usersService.findOneId(user);
     const idFoundUser = foundUser.id;
@@ -109,6 +109,9 @@ export class CondominiumService {
       throw new BadRequestException(
         'Condomínio não pertence ao usuário. Operação não permitida',
       );
+    }
+
+    if (!foundCondominiun) {
     }
 
     await foundCondominiun.save();
