@@ -79,6 +79,7 @@ export class UsersService {
           email: user.email,
           door: user.door,
           tower: user.tower,
+          role: user.role,
         };
       });
 
