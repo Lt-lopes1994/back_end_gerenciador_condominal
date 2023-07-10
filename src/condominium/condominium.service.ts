@@ -43,7 +43,7 @@ export class CondominiumService {
       !city ||
       !user
     ) {
-      throw new Error('Todos os campos são obrigatórios');
+      throw new BadRequestException('Todos os campos são obrigatórios');
     }
 
     const foundUser = await this.usersService.findOneId(user);
@@ -103,27 +103,24 @@ export class CondominiumService {
     id: string,
     updateCondominiumDto: UpdateCondominiumDto,
   ): Promise<ResultDto> {
-    const { user } = updateCondominiumDto;
+    const { user, name } = updateCondominiumDto;
 
-    // if (!user) {
-    //   throw new BadRequestException('Usuário não informado');
-    // }
+    if (!user) {
+      throw new BadRequestException('Usuário não informado');
+    }
 
     const foundCondominiun = await this.findOneNoPopulate(id);
 
-    // const foundUser = await this.usersService.findOneId(user);
+    const foundUser = await this.usersService.findOneId(user);
 
-    // if (foundCondominiun.user !== foundUser.id) {
-    //   throw new BadRequestException(
-    //     'Condomínio não pertence ao usuário. Operação não permitida',
-    //   );
-    // }
+    if (foundCondominiun.user.toString() !== foundUser.id) {
+      throw new BadRequestException(
+        'Condomínio não pertence ao usuário. Operação não permitida',
+      );
+    }
 
     if (name) {
       foundCondominiun.name = name;
-    }
-
-    if (!foundCondominiun) {
     }
 
     await foundCondominiun.save();
