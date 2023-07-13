@@ -9,4 +9,5 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   tower?: string;
   door?: number;
   activebit?: boolean;
+  role?: string;
 }

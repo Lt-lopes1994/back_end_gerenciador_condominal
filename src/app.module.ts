@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { UsersModule } from './users/users.module';
-import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
-import { TokenModule } from './token/token.module';
 import { NewsModule } from './news/news.module';
+import { TokenModule } from './token/token.module';
+import { CondominiumModule } from './condominium/condominium.module';
+import { AdministratorModule } from './administrator/administrator.module';
 
 @Module({
   imports: [
@@ -13,6 +14,8 @@ import { NewsModule } from './news/news.module';
     AuthModule,
     TokenModule,
     NewsModule,
+    CondominiumModule,
+    AdministratorModule,
   ],
   controllers: [],
   providers: [],

@@ -15,7 +15,7 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
+  constructor(@InjectModel('User') private readonly userModel: Model<User>) { }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const email = createUserDto.email;
@@ -79,6 +79,7 @@ export class UsersService {
           email: user.email,
           door: user.door,
           tower: user.tower,
+          role: user.role,
         };
       });
 
@@ -88,7 +89,7 @@ export class UsersService {
     return foundUser;
   }
 
-  async findOne(id: string): Promise<ReturnUserDto | undefined> {
+  async findOneId(id: string): Promise<ReturnUserDto | undefined> {
     const foundUser = await this.userModel.findOne({ _id: id }).exec();
 
     if (!foundUser) {
@@ -102,6 +103,7 @@ export class UsersService {
         email: foundUser.email,
         door: foundUser.door,
         tower: foundUser.tower,
+        role: foundUser.role
       };
 
       return returnUser;
@@ -151,8 +153,23 @@ export class UsersService {
     };
   }
 
+  async updateRole(id: string, userRole: UpdateUserDto): Promise<ResultDto> {
+    await this.findOneId(id);
+
+    if (userRole.role === 'admin' || userRole.role === 'user') {
+      await this.userModel.updateOne({ _id: id }, { $set: { role: userRole.role } });
+    } else {
+      throw new BadRequestException('Essa não é uma role válida');
+    }
+
+    return {
+      message: 'Role atualizada com sucesso',
+      status: 200,
+    }
+  }
+
   async remove(id: string): Promise<ResultDto> {
-    const foundUser = this.findOne(id);
+    const foundUser = this.findOneId(id);
 
     if (!foundUser) {
       throw new NotFoundException('Usuário não encontrado');
