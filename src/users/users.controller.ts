@@ -65,6 +65,11 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto);
   }
 
+  @Patch('/redefinir-senha/:id')
+  updatePassword(@Param('id') id: string, @Body() updatePassword: UpdateUserDto) {
+    return this.usersService.updatePassword(id, updatePassword);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Patch('admin/:id')
   updateRole(@Param('id') id: string, @Body() userRole: UpdateUserDto) {

@@ -168,6 +168,30 @@ export class UsersService {
     }
   }
 
+  async updatePassword(id: string, updatePassword: UpdateUserDto): Promise<ResultDto> {
+    const foundUser = await this.findOneId(id);
+
+    if (!updatePassword.password) {
+      throw new BadRequestException('Todos os campos são necessários');
+    }
+
+    if (updatePassword.password !== updatePassword.passwordConfirm) {
+      throw new BadRequestException('Senhas não conferem');
+    }
+
+    updatePassword.password = bcrypt.hashSync(
+      updatePassword.password,
+      +process.env.SALT,
+    );
+
+    await this.userModel.updateOne({ _id: id }, { $set: { password: updatePassword.password } });
+
+    return {
+      message: 'Senha atualizada com sucesso',
+      status: 200,
+    };
+  }
+
   async remove(id: string): Promise<ResultDto> {
     const foundUser = this.findOneId(id);
 
