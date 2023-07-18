@@ -9,7 +9,10 @@ import { AdministratorModule } from './administrator/administrator.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ envFilePath: '.env' }),
+    ConfigModule.forRoot({
+      envFilePath: ['.development.env', '.production.env'],
+      isGlobal: true,
+    }),
     MongooseModule.forRoot(`${process.env.mongoURL}`),
     AuthModule,
     TokenModule,
