@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -37,6 +38,11 @@ export class UsersController {
     };
   }
 
+  @Get('redefinir-senha')
+  async sendEmail(@Body() { email }: { email: string }): Promise<ResultDto> {
+    return await this.usersService.forgotPassword(email);
+  }
+
   @UseGuards(AuthGuard('local'))
   @Post('login')
   async login(@Request() req) {
@@ -65,7 +71,7 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto);
   }
 
-  @Patch('/redefinir-senha/:id')
+  @Patch('redefinir-senha/:id')
   updatePassword(@Param('id') id: string, @Body() updatePassword: UpdateUserDto) {
     return this.usersService.updatePassword(id, updatePassword);
   }
