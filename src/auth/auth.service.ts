@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -11,7 +11,7 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private readonly tokenService: TokenService,
-  ) {}
+  ) { }
 
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.usersService.findOneLogin(email);
@@ -28,11 +28,15 @@ export class AuthService {
     const payload = {
       name: user.name,
       email: user.email,
-      sub: user.id,
+      id: user._id,
       role: user.role,
       door: user.door,
       tower: user.tower,
     };
+
+    if (!user.activebit) {
+      throw new BadRequestException('Usuário desativado.');
+    }
 
     const token = this.jwtService.sign(payload);
     this.tokenService.saveToken(token, user.email);

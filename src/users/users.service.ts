@@ -12,10 +12,17 @@ import { Model } from 'mongoose';
 import { ReturnUserDto } from 'src/dto/returnUser.dto';
 import { ResultDto } from '../dto/result.dto';
 import * as bcrypt from 'bcrypt';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
+
+  constructor(
+    @InjectModel('User')
+    private readonly userModel: Model<User>,
+    private mailService: MailerService
+  ) { }
+
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const email = createUserDto.email;
@@ -168,6 +175,55 @@ export class UsersService {
 
     return {
       message: 'Role atualizada com sucesso',
+      status: 200,
+    };
+  }
+
+  async forgotPassword(email: string): Promise<ResultDto> {
+    const foundUser = await this.findOneLogin(email);
+
+    if (!foundUser) {
+      throw new NotFoundException('O email informado não está cadastrado.');
+    }
+
+    await this.mailService.sendMail({
+      to: 'eduardojarek66@gmail.com',
+      subject: 'Recuperar senha',
+      template: 'forgotPass',
+      context: {
+        email: {
+          name: foundUser.name,
+          link: `http://localhost:8000/api/v1/users/teste/${foundUser._id}`
+        }
+      }
+    });
+
+    return {
+      message: 'Email enviado com sucesso',
+      status: 200,
+    }
+  }
+
+  async updatePassword(id: string, updatePassword: UpdateUserDto): Promise<ResultDto> {
+    const foundUser = await this.findOneId(id);
+
+    if (!updatePassword.password) {
+      throw new BadRequestException('Todos os campos são necessários');
+    }
+
+    if (updatePassword.password !== updatePassword.passwordConfirm) {
+      throw new BadRequestException('Senhas não conferem');
+    }
+
+    updatePassword.password = bcrypt.hashSync(
+      updatePassword.password,
+      +process.env.SALT,
+    );
+
+    await this.userModel.updateOne({ _id: id }, { $set: { password: updatePassword.password } });
+
+    return {
+      message: 'Senha atualizada com sucesso',
       status: 200,
     };
   }
