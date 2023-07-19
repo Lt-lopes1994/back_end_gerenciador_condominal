@@ -12,10 +12,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      envFilePath: ['.development.env', '.production.env'],
-      isGlobal: true,
-    }),
+    ConfigModule.forRoot({ envFilePath: '.env' }),
     MailerModule.forRoot({
       transport: {
         host: process.env.MAIL_HOST,
