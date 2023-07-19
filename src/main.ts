@@ -30,8 +30,8 @@ async function bootstrap() {
 
   app.useGlobalFilters(new AllExceptionFilter());
   app.enableCors();
-  app.setGlobalPrefix('api/v1');
-  await app.listen(8000);
+  app.setGlobalPrefix('/api/v1');
+  await app.listen(PORT);
   console.log('AppModule created', `Server listening on port ${PORT}`);
 }
 bootstrap();
