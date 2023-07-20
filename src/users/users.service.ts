@@ -187,7 +187,7 @@ export class UsersService {
     }
 
     await this.mailService.sendMail({
-      to: 'eduardojarek66@gmail.com',
+      to: email,
       subject: 'Recuperar senha',
       template: 'forgotPass',
       context: {
