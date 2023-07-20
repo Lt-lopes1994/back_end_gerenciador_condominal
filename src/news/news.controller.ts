@@ -38,7 +38,7 @@ export class NewsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Patch('/:id')
+  @Patch('editar/:id')
   update(@Param('id') id: string, @Body() updateNewsDto: UpdateNewsDto) {
     return this.newsService.update(id, updateNewsDto);
   }
