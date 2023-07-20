@@ -180,20 +180,29 @@ export class UsersService {
   }
 
   async forgotPassword(email: string): Promise<ResultDto> {
-    const foundUser = await this.findOneLogin(email);
+    const foundUser = await this.findOneLogin(email.trim());
 
     if (!foundUser) {
       throw new NotFoundException('O email informado não está cadastrado.');
     }
 
+    const expirationTime = new Date(Date.now() + 60 * 60 * 1000);
+
+    const codeGenerator = Math.floor(Math.random() * 1000000)
+
+    foundUser.verificationCode = codeGenerator
+    foundUser.expirationTime = expirationTime
+
+    await foundUser.save();
+
     await this.mailService.sendMail({
-      to: email,
+      to: email.trim(),
       subject: 'Recuperar senha',
       template: 'forgotPass',
       context: {
         email: {
           name: foundUser.name,
-          link: `http://localhost:8000/api/v1/users/teste/${foundUser._id}`
+          link: codeGenerator
         }
       }
     });
@@ -202,6 +211,29 @@ export class UsersService {
       message: 'Email enviado com sucesso',
       status: 200,
     }
+  }
+
+  async validateCode(code: number): Promise<ReturnUserDto | undefined> {
+    if (!code) {
+      throw new BadRequestException('Código não informado');
+    }
+
+    const foundUser = await this.userModel.findOne({ verificationCode: code });
+
+    if (!foundUser) {
+      throw new NotFoundException('Código inválido');
+    }
+
+    const returnUser: ReturnUserDto = {
+      id: foundUser.id,
+      name: foundUser.name,
+      email: foundUser.email,
+      door: foundUser.door,
+      tower: foundUser.tower,
+      role: foundUser.role,
+    }
+
+    return returnUser;
   }
 
   async updatePassword(id: string, updatePassword: UpdateUserDto): Promise<ResultDto> {

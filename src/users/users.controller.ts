@@ -43,6 +43,11 @@ export class UsersController {
     return await this.usersService.forgotPassword(email);
   }
 
+  @Get('redefinir-senha/token')
+  async validateCode(@Body() { code }: { code: number }): Promise<ReturnUserDto> {
+    return await this.usersService.validateCode(code);
+  }
+
   @UseGuards(AuthGuard('local'))
   @Post('login')
   async login(@Request() req) {
@@ -71,7 +76,7 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto);
   }
 
-  @Patch('/redefinir-senha/:id')
+  @Patch('redefinir-senha/:id')
   updatePassword(@Param('id') id: string, @Body() updatePassword: UpdateUserDto) {
     return this.usersService.updatePassword(id, updatePassword);
   }
