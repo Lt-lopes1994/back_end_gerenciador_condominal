@@ -13,6 +13,7 @@ export const UserSchema = new mongoose.Schema(
     tower: { type: String, required: true },
     role: { type: String, required: true, default: 'user' },
     activebit: { type: Boolean, required: true, default: true },
+    verificationCode: { type: Number }
   },
   { timestamps: true, collection: 'users' },
 );
