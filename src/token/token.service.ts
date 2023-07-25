@@ -7,16 +7,15 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { AuthService } from 'src/auth/auth.service';
 import { UsersService } from 'src/users/users.service';
 import { Token } from './entities/token.entity';
-import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class TokenService {
   constructor(
     @InjectModel('Token') private readonly tokenModel: Model<Token>,
     private readonly userService: UsersService,
-    //! Circular dependency detected need to use forwardRef like module imports to avoid errors while compiling:
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
   ) {}
@@ -25,13 +24,9 @@ export class TokenService {
     const foundToken = await this.tokenModel.findOne({ email: username });
 
     if (foundToken) {
-      await this.tokenModel
-        .updateOne()
-        .where({ email: username })
-        .set({ hash })
-        .exec();
+      await this.tokenModel.updateOne({ email: username }, { hash }).exec();
     } else {
-      this.tokenModel.create({ hash, email: username });
+      await this.tokenModel.create({ hash, email: username });
     }
   }
 
@@ -40,10 +35,11 @@ export class TokenService {
 
     if (foundToken) {
       const user = await this.userService.findOneLogin(foundToken.email);
-
-      return this.authService.login(user);
-    } else {
-      return new HttpException('Token inválido', HttpStatus.UNAUTHORIZED);
+      if (user) {
+        return this.authService.login(user);
+      }
     }
+
+    throw new HttpException('Token inválido', HttpStatus.UNAUTHORIZED);
   }
 }

@@ -10,4 +10,5 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   door?: number;
   activebit?: boolean;
   role?: string;
+  verificationCode?: number;
 }

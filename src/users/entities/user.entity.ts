@@ -10,4 +10,6 @@ export interface User extends Document {
   readonly createdAt: Date;
   readonly updatedAt: Date;
   role: string;
+  verificationCode?: number;
+  expirationTime?: Date;
 }

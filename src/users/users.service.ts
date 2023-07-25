@@ -12,10 +12,17 @@ import { Model } from 'mongoose';
 import { ReturnUserDto } from 'src/dto/returnUser.dto';
 import { ResultDto } from '../dto/result.dto';
 import * as bcrypt from 'bcrypt';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel('User') private readonly userModel: Model<User>) { }
+
+  constructor(
+    @InjectModel('User')
+    private readonly userModel: Model<User>,
+    private mailService: MailerService
+  ) { }
+
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const email = createUserDto.email;
@@ -103,7 +110,7 @@ export class UsersService {
         email: foundUser.email,
         door: foundUser.door,
         tower: foundUser.tower,
-        role: foundUser.role
+        role: foundUser.role,
       };
 
       return returnUser;
@@ -157,7 +164,11 @@ export class UsersService {
     await this.findOneId(id);
 
     if (userRole.role === 'admin' || userRole.role === 'user') {
-      await this.userModel.updateOne({ _id: id }, { $set: { role: userRole.role } });
+      await this.userModel.updateOne(
+        { _id: id },
+        { $set: { role: userRole.role } },
+      );
+      console.log(id, userRole.role);
     } else {
       throw new BadRequestException('Essa não é uma role válida');
     }
@@ -165,7 +176,88 @@ export class UsersService {
     return {
       message: 'Role atualizada com sucesso',
       status: 200,
+    };
+  }
+
+  async forgotPassword(email: string): Promise<ResultDto> {
+    const foundUser = await this.findOneLogin(email.trim());
+
+    if (!foundUser) {
+      throw new NotFoundException('O email informado não está cadastrado.');
     }
+
+    const expirationTime = new Date(Date.now() + 60 * 60 * 1000);
+
+    const codeGenerator = Math.floor(Math.random() * 1000000)
+
+    foundUser.verificationCode = codeGenerator
+    foundUser.expirationTime = expirationTime
+
+    await foundUser.save();
+
+    await this.mailService.sendMail({
+      to: email.trim(),
+      subject: 'Recuperar senha',
+      template: 'forgotPass',
+      context: {
+        email: {
+          name: foundUser.name,
+          link: codeGenerator
+        }
+      }
+    });
+
+    return {
+      message: 'Email enviado com sucesso',
+      status: 200,
+    }
+  }
+
+  async validateCode(code: number): Promise<ReturnUserDto | undefined> {
+    if (!code) {
+      throw new BadRequestException('Código não informado');
+    }
+
+    const foundUser = await this.userModel.findOne({ verificationCode: code });
+
+    if (!foundUser) {
+      throw new NotFoundException('Código inválido');
+    }
+
+    const returnUser: ReturnUserDto = {
+      id: foundUser.id,
+      name: foundUser.name,
+      email: foundUser.email,
+      door: foundUser.door,
+      tower: foundUser.tower,
+      role: foundUser.role,
+    }
+
+    return returnUser;
+  }
+
+  async updatePassword(id: string, updatePassword: UpdateUserDto): Promise<ResultDto> {
+    const foundUser = await this.findOneId(id);
+
+    if (!updatePassword.password) {
+      throw new BadRequestException('Todos os campos são necessários');
+    }
+
+    if (updatePassword.password !== updatePassword.passwordConfirm) {
+      throw new BadRequestException('Senhas não conferem');
+    }
+
+    updatePassword.password = bcrypt.hashSync(
+      updatePassword.password,
+      +process.env.SALT,
+    );
+
+    await this.userModel.updateOne({ _id: id }, { $set: { password: updatePassword.password } });
+
+    return {
+      message: 'Senha atualizada com sucesso',
+      status: 200,
+    };
   }
 
   async remove(id: string): Promise<ResultDto> {
