@@ -188,9 +188,9 @@ export class UsersService {
 
     const expirationTime = new Date(Date.now() + 60 * 60 * 1000);
 
-    const codeGenerator = Math.floor(Math.random() * 1000000)
+    const codeGenerator = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
 
-    foundUser.verificationCode = codeGenerator
+    foundUser.verificationCode = codeGenerator;
     foundUser.expirationTime = expirationTime
 
     await foundUser.save();
@@ -213,7 +213,7 @@ export class UsersService {
     }
   }
 
-  async validateCode(code: number): Promise<ReturnUserDto | undefined> {
+  async validateCode(code: string): Promise<ReturnUserDto | undefined> {
     if (!code) {
       throw new BadRequestException('Código não informado');
     }

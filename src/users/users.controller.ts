@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Patch,
   Post,
@@ -39,12 +40,14 @@ export class UsersController {
   }
 
   @Post('redefinir-senha')
+  @HttpCode(200)
   async sendEmail(@Body() { email }: { email: string }): Promise<ResultDto> {
     return await this.usersService.forgotPassword(email);
   }
 
   @Post('redefinir-senha/token')
-  async validateCode(@Body() { code }: { code: number }): Promise<ReturnUserDto> {
+  @HttpCode(200)
+  async validateCode(@Body() { code }: { code: string }): Promise<ReturnUserDto> {
     return await this.usersService.validateCode(code);
   }
 
