@@ -38,12 +38,12 @@ export class UsersController {
     };
   }
 
-  @Get('redefinir-senha')
+  @Post('redefinir-senha')
   async sendEmail(@Body() { email }: { email: string }): Promise<ResultDto> {
     return await this.usersService.forgotPassword(email);
   }
 
-  @Get('redefinir-senha/token')
+  @Post('redefinir-senha/token')
   async validateCode(@Body() { code }: { code: number }): Promise<ReturnUserDto> {
     return await this.usersService.validateCode(code);
   }
