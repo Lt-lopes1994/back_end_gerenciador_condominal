@@ -191,7 +191,7 @@ export class UsersService {
     const codeGenerator = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
 
     foundUser.verificationCode = codeGenerator;
-    foundUser.expirationTime = expirationTime
+    foundUser.expirationTime = expirationTime;
 
     await foundUser.save();
 
