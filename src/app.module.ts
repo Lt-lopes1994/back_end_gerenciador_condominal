@@ -6,6 +6,7 @@ import { NewsModule } from './news/news.module';
 import { TokenModule } from './token/token.module';
 import { CondominiumModule } from './condominium/condominium.module';
 import { AdministratorModule } from './administrator/administrator.module';
+import { SpaceReservationModule } from './space-reservation/space-reservation.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AdministratorModule } from './administrator/administrator.module';
     NewsModule,
     CondominiumModule,
     AdministratorModule,
+    SpaceReservationModule,
   ],
   controllers: [],
   providers: [],
