@@ -43,5 +43,12 @@ export class CreateUserDto {
   })
   readonly tower: string;
 
+  @ApiProperty({
+    type: 'string',
+    description: 'Código do condóminio do usuário',
+    example: '123456'
+  })
+  readonly condominiumCode: string;
+
   readonly activebit: boolean;
 }

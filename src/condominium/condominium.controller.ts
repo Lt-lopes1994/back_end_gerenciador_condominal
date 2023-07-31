@@ -11,6 +11,7 @@ import { CondominiumService } from './condominium.service';
 import { CreateCondominiumDto } from './dto/create-condominium.dto';
 import { UpdateCondominiumDto } from './dto/update-condominium.dto';
 import { Condominium } from './entities/condominium.entity';
+import { ResultDto } from 'src/dto/result.dto';
 
 //* O modulo controller serve para fazer a comunicação com o modulo service
 //* O modulo controller serve para fazer a comunicação com o modulo repository
@@ -21,12 +22,12 @@ import { Condominium } from './entities/condominium.entity';
 //* Esse modulo serve somente para chamar as rotas e passar os dados para o modulo service
 @Controller('condominio')
 export class CondominiumController {
-  constructor(private readonly condominiumService: CondominiumService) {}
+  constructor(private readonly condominiumService: CondominiumService) { }
 
   @Post()
   create(
     @Body() createCondominiumDto: CreateCondominiumDto,
-  ): Promise<Condominium> {
+  ): Promise<ResultDto> {
     return this.condominiumService.create(createCondominiumDto);
   }
 

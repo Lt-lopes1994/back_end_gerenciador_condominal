@@ -25,16 +25,16 @@ import { ResultDto } from 'src/dto/result.dto';
 export class CondominiumService {
   //* O @InjectModel('Condominium') private readonly data: Model<Condominium> é necessário para que o MongooseModule possa acessar o schema do Condominium
   constructor(
-    @InjectModel('Condominium') private readonly data: Model<Condominium>,
+    @InjectModel('Condominium')
+    private readonly data: Model<Condominium>,
     private readonly usersService: UsersService,
   ) { }
 
   async create(
     createCondominiumDto: CreateCondominiumDto,
-  ): Promise<Condominium> {
+  ): Promise<ResultDto> {
     const { name, streetNumber, streetName, neighborhood, city, user } =
       createCondominiumDto;
-
     if (
       !name ||
       !streetNumber ||
@@ -54,11 +54,28 @@ export class CondominiumService {
       throw new BadRequestException('Condomínio já cadastrado');
     }
 
+    createCondominiumDto.codeCondominium = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+
+    const foundCodeCondominium = await this.findCode(createCondominiumDto.codeCondominium);
+
+    if (foundCodeCondominium) {
+      createCondominiumDto.codeCondominium = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+    }
+
     const newCondominium = new this.data(createCondominiumDto);
 
-    console.log(newCondominium);
+    newCondominium.save();
 
-    return newCondominium.save();
+    return {
+      message: 'Condomínio cadastrado',
+      status: 201
+    }
+  }
+
+  async findCode(code: string): Promise<Condominium | void> {
+    const foundCondominium = await this.data.findOne({ codeCondominium: code });
+
+    return foundCondominium;
   }
 
   async findAll(): Promise<Condominium[]> {
