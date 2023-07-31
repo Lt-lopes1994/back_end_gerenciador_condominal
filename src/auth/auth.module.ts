@@ -13,10 +13,12 @@ import { NewsModule } from 'src/news/news.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: '.env' }),
+
     JwtModule.register({
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '1d' },
+      signOptions: { expiresIn: '60s' },
     }),
+
     UsersModule,
     PassportModule,
     TokenModule,

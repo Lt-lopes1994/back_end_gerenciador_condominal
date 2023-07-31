@@ -3,9 +3,11 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Patch,
   Post,
+  Query,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -37,6 +39,18 @@ export class UsersController {
     };
   }
 
+  @Post('redefinir-senha')
+  @HttpCode(200)
+  async sendEmail(@Body() { email }: { email: string }): Promise<ResultDto> {
+    return await this.usersService.forgotPassword(email);
+  }
+
+  @Post('redefinir-senha/token')
+  @HttpCode(200)
+  async validateCode(@Body() { code }: { code: string }): Promise<ReturnUserDto> {
+    return await this.usersService.validateCode(code);
+  }
+
   @UseGuards(AuthGuard('local'))
   @Post('login')
   async login(@Request() req) {
@@ -63,6 +77,11 @@ export class UsersController {
   @Patch('/:id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
+  }
+
+  @Patch('redefinir-senha/:id')
+  updatePassword(@Param('id') id: string, @Body() updatePassword: UpdateUserDto) {
+    return this.usersService.updatePassword(id, updatePassword);
   }
 
   @UseGuards(JwtAuthGuard)
