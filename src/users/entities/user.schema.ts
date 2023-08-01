@@ -15,7 +15,7 @@ export const UserSchema = new mongoose.Schema(
     activebit: { type: Boolean, required: true, default: true },
     verificationCode: { type: Number },
     expirationTime: { type: Date },
-    condominium: { type: String, require: true }
+    codeCondominium: { type: String, require: true }
   },
   { timestamps: true, collection: 'users' },
 );

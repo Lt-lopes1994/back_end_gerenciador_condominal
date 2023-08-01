@@ -10,6 +10,7 @@ import { SpaceReservationModule } from './space-reservation/space-reservation.mo
 import { MailerModule } from '@nestjs-modules/mailer';
 import { join } from 'path';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
     CondominiumModule,
     AdministratorModule,
     SpaceReservationModule,
+    SharedModule
   ],
   controllers: [],
   providers: [],

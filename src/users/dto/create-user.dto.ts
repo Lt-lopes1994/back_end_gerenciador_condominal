@@ -48,7 +48,7 @@ export class CreateUserDto {
     description: 'Código do condóminio do usuário',
     example: '123456'
   })
-  readonly condominiumCode: string;
+  readonly codeCondominium: string;
 
   readonly activebit: boolean;
 }

@@ -5,7 +5,7 @@ import { UsersService } from './users.service';
 import { UserSchema } from './entities/user.schema';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from 'src/auth/auth.module';
-import { CondominiumModule } from 'src/condominium/condominium.module';
+import { SharedModule } from 'src/shared/shared.module';
 
 //* O forwardRef é necessário para que o AuthModule possa importar o UsersModule e se torna uma dependência cíclica podendo ser retirada do AppModule
 @Module({
@@ -13,7 +13,7 @@ import { CondominiumModule } from 'src/condominium/condominium.module';
     ConfigModule.forRoot({ envFilePath: '.env' }),
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
     forwardRef(() => AuthModule),
-    CondominiumModule,
+    SharedModule
   ],
   controllers: [UsersController],
   providers: [UsersService],
