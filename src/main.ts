@@ -1,16 +1,9 @@
 import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import * as momentTimezone from 'moment-timezone';
 import { AllExceptionFilter } from './common/filters/allExceptionFilter';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
-  Date.prototype.toJSON = function (): any {
-    return momentTimezone(this)
-      .tz('America/Sao_Paulo')
-      .format('YYYY-MM-DD HH:mm:ss');
-  };
-
   const PORT = 8000;
 
   const app = await NestFactory.create(AppModule);
