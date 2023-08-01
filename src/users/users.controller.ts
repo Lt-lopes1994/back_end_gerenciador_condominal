@@ -35,7 +35,7 @@ export class UsersController {
 
     return {
       message: 'Usuário cadastrado com sucesso',
-      status: 200,
+      status: 201,
     };
   }
 
