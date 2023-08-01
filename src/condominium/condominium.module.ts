@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { CondominiumService } from './condominium.service';
 import { CondominiumController } from './condominium.controller';
 import { UsersModule } from 'src/users/users.module';
@@ -16,9 +16,10 @@ import { CondominiumSchema } from './entities/concominium.schema';
     MongooseModule.forFeature([
       { name: 'Condominium', schema: CondominiumSchema },
     ]),
-    UsersModule,
+    forwardRef(() => UsersModule)
   ],
   controllers: [CondominiumController],
   providers: [CondominiumService],
+  exports: [CondominiumService]
 })
-export class CondominiumModule {}
+export class CondominiumModule { }

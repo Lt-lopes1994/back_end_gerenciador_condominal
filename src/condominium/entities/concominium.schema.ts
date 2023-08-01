@@ -19,6 +19,7 @@ export const CondominiumSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
+    codeCondominium: { type: String, required: true }
   },
   { timestamps: true, collection: 'condominiums' },
 );

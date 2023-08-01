@@ -23,18 +23,18 @@ import { ResultDto } from 'src/dto/result.dto';
 
 @Injectable()
 export class CondominiumService {
-  //* O @InjectModel('Condominium') private readonly data: Model<Condominium> é necessário para que o MongooseModule possa acessar o schema do Condominium
+  //* O @InjectModel('Condominium') private readonly condominium: Model<Condominium> é necessário para que o MongooseModule possa acessar o schema do Condominium
   constructor(
-    @InjectModel('Condominium') private readonly data: Model<Condominium>,
+    @InjectModel('Condominium')
+    private readonly condominium: Model<Condominium>,
     private readonly usersService: UsersService,
   ) { }
 
   async create(
     createCondominiumDto: CreateCondominiumDto,
-  ): Promise<Condominium> {
+  ): Promise<ResultDto> {
     const { name, streetNumber, streetName, neighborhood, city, user } =
       createCondominiumDto;
-
     if (
       !name ||
       !streetNumber ||
@@ -54,15 +54,32 @@ export class CondominiumService {
       throw new BadRequestException('Condomínio já cadastrado');
     }
 
-    const newCondominium = new this.data(createCondominiumDto);
+    createCondominiumDto.codeCondominium = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
 
-    console.log(newCondominium);
+    const foundCodeCondominium = await this.findCode(createCondominiumDto.codeCondominium);
 
-    return newCondominium.save();
+    if (foundCodeCondominium) {
+      createCondominiumDto.codeCondominium = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+    }
+
+    const newCondominium = new this.condominium(createCondominiumDto);
+
+    newCondominium.save();
+
+    return {
+      message: 'Condomínio cadastrado',
+      status: 201
+    }
+  }
+
+  async findCode(code: string): Promise<Condominium | void> {
+    const foundCondominium = await this.condominium.findOne({ codeCondominium: code });
+
+    return foundCondominium;
   }
 
   async findAll(): Promise<Condominium[]> {
-    const foundCondominiun = await this.data
+    const foundCondominiun = await this.condominium
       .find()
       .populate({ path: 'user', select: 'name -_id', model: 'User' })
       .exec();
@@ -71,7 +88,7 @@ export class CondominiumService {
   }
 
   async findOne(id: string): Promise<Condominium> {
-    const foundCondominiun = await this.data
+    const foundCondominiun = await this.condominium
       .findById(id)
       .populate({
         path: 'user',
@@ -84,7 +101,7 @@ export class CondominiumService {
   }
 
   async findOneNoPopulate(id: string): Promise<Condominium> {
-    const foundCondominiun = await this.data.findById(id).exec();
+    const foundCondominiun = await this.condominium.findById(id).exec();
 
     if (!foundCondominiun) {
       throw new NotFoundException('Condominio não encontrado');
@@ -94,7 +111,7 @@ export class CondominiumService {
   }
 
   async findOneByName(name: string): Promise<Condominium> {
-    const foundCondominiun = await this.data.findOne({ name }).exec();
+    const foundCondominiun = await this.condominium.findOne({ name }).exec();
 
     return foundCondominiun;
   }
