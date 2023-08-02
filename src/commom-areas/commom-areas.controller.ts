@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { CommomAreasService } from './commom-areas.service';
 import { CreateCommomAreaDto } from './dto/create-commom-area.dto';
 import { UpdateCommomAreaDto } from './dto/update-commom-area.dto';
@@ -7,7 +15,7 @@ import { UpdateCommomAreaDto } from './dto/update-commom-area.dto';
 export class CommomAreasController {
   constructor(private readonly commomAreasService: CommomAreasService) {}
 
-  @Post()
+  @Post('/create')
   create(@Body() createCommomAreaDto: CreateCommomAreaDto) {
     return this.commomAreasService.create(createCommomAreaDto);
   }
@@ -23,7 +31,10 @@ export class CommomAreasController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCommomAreaDto: UpdateCommomAreaDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateCommomAreaDto: UpdateCommomAreaDto,
+  ) {
     return this.commomAreasService.update(+id, updateCommomAreaDto);
   }
 
