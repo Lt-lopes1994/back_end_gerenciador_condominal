@@ -14,7 +14,7 @@ async function bootstrap() {
       'API para controle de condomínios e moradores de condomínios residenciais e comerciais.',
     )
     .setVersion('0.0.1')
-    .addServer(`${PORT}/api/v1`)
+    .addServer(`https://manager-condominial.onrender.com:8000/api/v1`)
     .addTag('users')
     .addTag('news')
     .build();
