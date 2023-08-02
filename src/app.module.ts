@@ -10,6 +10,7 @@ import { SpaceReservationModule } from './space-reservation/space-reservation.mo
 import { MailerModule } from '@nestjs-modules/mailer';
 import { join } from 'path';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { SharedModule } from './shared/shared.module';
 import { CommomAreasModule } from './commom-areas/commom-areas.module';
 
 @Module({
@@ -21,16 +22,16 @@ import { CommomAreasModule } from './commom-areas/commom-areas.module';
         port: Number(process.env.MAIL_PORT),
         auth: {
           user: process.env.MAIL_USER,
-          pass: process.env.MAIL_PASS
-        }
+          pass: process.env.MAIL_PASS,
+        },
       },
       defaults: {
-        from: `${process.env.MAIL_NAME} <${process.env.MAIL_FROM}>`
+        from: `${process.env.MAIL_NAME} <${process.env.MAIL_FROM}>`,
       },
       template: {
         dir: join(__dirname, 'templates'),
-        adapter: new HandlebarsAdapter()
-      }
+        adapter: new HandlebarsAdapter(),
+      },
     }),
     MongooseModule.forRoot(`${process.env.mongoURL}`),
     AuthModule,
@@ -39,9 +40,10 @@ import { CommomAreasModule } from './commom-areas/commom-areas.module';
     CondominiumModule,
     AdministratorModule,
     SpaceReservationModule,
+    SharedModule,
     CommomAreasModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}

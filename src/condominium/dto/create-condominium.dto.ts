@@ -47,5 +47,12 @@ export class CreateCondominiumDto {
   })
   readonly user: string;
 
+  @ApiProperty({
+    type: 'string',
+    description: 'Código do condomínio',
+    example: '123456'
+  })
+  codeCondominium: string;
+
   activebit: boolean;
 }

@@ -12,4 +12,5 @@ export interface User extends Document {
   role: string;
   verificationCode?: string;
   expirationTime?: Date;
+  codeCondominium: string;
 }

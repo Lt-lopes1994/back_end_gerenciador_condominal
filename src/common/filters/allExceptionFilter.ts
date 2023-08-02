@@ -1,5 +1,6 @@
 import {
   ArgumentsHost,
+  BadRequestException,
   Catch,
   ExceptionFilter,
   HttpException,
@@ -11,7 +12,7 @@ import {
 export class AllExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(AllExceptionFilter.name);
 
-  catch(exception: unknown, host: ArgumentsHost) {
+  catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const res = ctx.getResponse();
     const req = ctx.getRequest();
@@ -23,8 +24,6 @@ export class AllExceptionFilter implements ExceptionFilter {
 
     const message =
       exception instanceof HttpException ? exception.getResponse() : exception;
-
-    console.log(message);
 
     this.logger.error(
       `Http Status: ${status} Error Message: ${JSON.stringify(message)}`,

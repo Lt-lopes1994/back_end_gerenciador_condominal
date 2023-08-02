@@ -13,13 +13,14 @@ import { ReturnUserDto } from 'src/dto/returnUser.dto';
 import { ResultDto } from '../dto/result.dto';
 import * as bcrypt from 'bcrypt';
 import { MailerService } from '@nestjs-modules/mailer';
+import { SharedService } from 'src/shared/shared.service';
 
 @Injectable()
 export class UsersService {
-
   constructor(
     @InjectModel('User')
     private readonly userModel: Model<User>,
+    private readonly sharedService: SharedService,
     private mailService: MailerService
   ) { }
 
@@ -51,10 +52,20 @@ export class UsersService {
       throw new BadRequestException('Torre não informada!');
     }
 
+    if (!createUserDto.codeCondominium) {
+      throw new BadRequestException('Código de condomínio não informado!');
+    }
+
     const foundUser = await this.userModel.findOne({ email: email }).exec();
 
     if (foundUser) {
-      throw new ForbiddenException('Usuário já cadastrado');
+      throw new ForbiddenException('Usuário já cadastrado!');
+    }
+
+    const foundCondominium = await this.sharedService.findCode(createUserDto.codeCondominium);
+
+    if (!foundCondominium) {
+      throw new BadRequestException('Condomínio não encontrado!');
     }
 
     const updateActive = { $set: { activebit: true } };
@@ -65,6 +76,7 @@ export class UsersService {
     );
 
     const newUser = new this.userModel(createUserDto);
+
     return await newUser.save();
   }
 
