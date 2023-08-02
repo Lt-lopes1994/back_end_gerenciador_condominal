@@ -20,26 +20,26 @@ export class CommomAreasController {
     return this.commomAreasService.create(createCommomAreaDto);
   }
 
-  @Get()
-  findAll() {
-    return this.commomAreasService.findAll();
+  @Get('/all/:id')
+  findAll(@Param('id') condominiumId: string) {
+    return this.commomAreasService.findAll(condominiumId);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.commomAreasService.findOne(+id);
+    return this.commomAreasService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch('/update/:id')
   update(
     @Param('id') id: string,
     @Body() updateCommomAreaDto: UpdateCommomAreaDto,
   ) {
-    return this.commomAreasService.update(+id, updateCommomAreaDto);
+    return this.commomAreasService.update(id, updateCommomAreaDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.commomAreasService.remove(+id);
+  @Delete('/:_id')
+  remove(@Param('_id') _id: string) {
+    return this.commomAreasService.remove(_id);
   }
 }
