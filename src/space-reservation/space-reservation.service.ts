@@ -3,15 +3,13 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Model } from 'mongoose';
-import { SpaceReservation } from './entities/space-reservation.entity';
-import { CreateSpaceReservationDto } from './dto/create-space-reservation.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { ReturnSpaceReservationDto } from 'src/dto/returnSpaceReservatino';
-import { UpdateSpaceReservationDto } from './dto/update-space-reservation.dto';
+import { Model } from 'mongoose';
 import { ResultDto } from 'src/dto/result.dto';
-import { CondominiumService } from 'src/condominium/condominium.service';
-import { CommomAreasService } from 'src/commom-areas/commom-areas.service';
+import { ReturnSpaceReservationDto } from 'src/dto/returnSpaceReservatino';
+import { CreateSpaceReservationDto } from './dto/create-space-reservation.dto';
+import { UpdateSpaceReservationDto } from './dto/update-space-reservation.dto';
+import { SpaceReservation } from './entities/space-reservation.entity';
 
 @Injectable()
 export class SpaceReservationService {
