@@ -11,7 +11,7 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private readonly tokenService: TokenService,
-  ) { }
+  ) {}
 
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.usersService.findOneLogin(email);
@@ -32,6 +32,7 @@ export class AuthService {
       role: user.role,
       door: user.door,
       tower: user.tower,
+      codeCondominium: user.codeCondominium,
     };
 
     if (!user.activebit) {
