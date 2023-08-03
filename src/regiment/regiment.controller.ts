@@ -1,9 +1,11 @@
-import { Controller, Get, Param, Post, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Controller, Get, Param, Post, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
+import { Response } from 'express';
+import multerConfig from 'src/configs/multer-config';
 import { ResultDto } from 'src/dto/result.dto';
+import { CreateRegimentDto } from './dto/create-regiment.dto';
 import { RegimentService } from './regiment.service';
-import { editFileName, fileFilter } from './utils/file-upload.utils';
+import { fileFilter } from './utils/file-upload.utils';
 
 @Controller('regimento')
 export class RegimentController {
@@ -13,20 +15,18 @@ export class RegimentController {
 
   @Post('upload')
   @UseInterceptors(
-    FileInterceptor('file', {
-      storage: diskStorage({
-        destination: 'src/uploads',
-        filename: editFileName
-      }),
-      fileFilter: fileFilter
-    })
+    FileInterceptor('file', multerConfig)
   )
-  upload(@UploadedFile() file: Express.Multer.File): Promise<ResultDto> {
-    return this.regimentService.uploadFile(file)
+  upload(@UploadedFile() file: Express.MulterS3.File): Promise<CreateRegimentDto> {
+    if (!file.originalname.match(/\.(pdf)$/)) {
+      throw new BadRequestException('Apenas arquivos em pdf são permitidos');
+    }
+
+    return this.regimentService.uploadFile(file);
   }
 
-  @Get(':filePath')
-  getFile(@Param('filePath') file, @Res() res) {
-    return res.sendFile(file, { root: 'src/uploads' });
+  @Get(':fileName')
+  async downloadFile(@Param('fileName') fileName: string, @Res() res: Response): Promise<void> {
+    return this.downloadFile(fileName, res);
   }
 }
