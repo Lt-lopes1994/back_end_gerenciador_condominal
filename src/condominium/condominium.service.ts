@@ -3,13 +3,13 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateCondominiumDto } from './dto/create-condominium.dto';
-import { UpdateCondominiumDto } from './dto/update-condominium.dto';
-import { UsersService } from 'src/users/users.service';
-import { Condominium } from './entities/condominium.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ResultDto } from 'src/dto/result.dto';
+import { UsersService } from 'src/users/users.service';
+import { CreateCondominiumDto } from './dto/create-condominium.dto';
+import { UpdateCondominiumDto } from './dto/update-condominium.dto';
+import { Condominium } from './entities/condominium.entity';
 
 //* O modulo service serve para fazer as regras de negocio, onde todos os dados são validados e tratados antes de serem enviados para o banco de dados
 //* O modulo service é responsável por fazer a comunicação com o banco de dados
@@ -72,7 +72,17 @@ export class CondominiumService {
     }
   }
 
-  async findCode(code: string): Promise<Condominium | void> {
+  async findCondominiumByCode(code: string): Promise<Condominium | void> {
+    const foundCondominium = await this.findCode(code);
+
+    if (!foundCondominium) {
+      throw new NotFoundException('Condomínio não encontrado!');
+    }
+
+    return foundCondominium;
+  }
+
+  private async findCode(code: string): Promise<Condominium | void> {
     const foundCondominium = await this.condominium.findOne({ codeCondominium: code });
 
     return foundCondominium;
