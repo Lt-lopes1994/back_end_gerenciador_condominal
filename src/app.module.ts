@@ -1,20 +1,25 @@
+import { MailerModule } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AuthModule } from './auth/auth.module';
-import { NewsModule } from './news/news.module';
-import { TokenModule } from './token/token.module';
-import { CondominiumModule } from './condominium/condominium.module';
-import { AdministratorModule } from './administrator/administrator.module';
-import { SpaceReservationModule } from './space-reservation/space-reservation.module';
-import { MailerModule } from '@nestjs-modules/mailer';
+import { MulterModule } from '@nestjs/platform-express';
 import { join } from 'path';
-import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
-import { SharedModule } from './shared/shared.module';
+import { AdministratorModule } from './administrator/administrator.module';
+import { AuthModule } from './auth/auth.module';
 import { CommomAreasModule } from './commom-areas/commom-areas.module';
+import { CondominiumModule } from './condominium/condominium.module';
+import { NewsModule } from './news/news.module';
+import { RegimentModule } from './regiment/regiment.module';
+import { SharedModule } from './shared/shared.module';
+import { SpaceReservationModule } from './space-reservation/space-reservation.module';
+import { TokenModule } from './token/token.module';
 
 @Module({
   imports: [
+    MulterModule.register({
+      dest: './uploads'
+    }),
     ConfigModule.forRoot({ envFilePath: '.env' }),
     MailerModule.forRoot({
       transport: {
@@ -42,8 +47,9 @@ import { CommomAreasModule } from './commom-areas/commom-areas.module';
     SpaceReservationModule,
     SharedModule,
     CommomAreasModule,
+    RegimentModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }

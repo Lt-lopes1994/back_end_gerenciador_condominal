@@ -7,11 +7,11 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ResultDto } from 'src/dto/result.dto';
 import { CondominiumService } from './condominium.service';
 import { CreateCondominiumDto } from './dto/create-condominium.dto';
 import { UpdateCondominiumDto } from './dto/update-condominium.dto';
 import { Condominium } from './entities/condominium.entity';
-import { ResultDto } from 'src/dto/result.dto';
 
 //* O modulo controller serve para fazer a comunicação com o modulo service
 //* O modulo controller serve para fazer a comunicação com o modulo repository
@@ -39,6 +39,11 @@ export class CondominiumController {
   @Get('/:id')
   findOne(@Param('id') id: string) {
     return this.condominiumService.findOne(id);
+  }
+
+  @Get('code/:code')
+  findCondominiumByCode(@Param('code') code: string) {
+    return this.condominiumService.findCondominiumByCode(code);
   }
 
   @Patch('/:id')
