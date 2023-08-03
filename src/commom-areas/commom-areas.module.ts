@@ -14,5 +14,6 @@ import { CommomAreaSchema } from './entities/common-area.schema';
   ],
   controllers: [CommomAreasController],
   providers: [CommomAreasService],
+  exports: [CommomAreasService],
 })
 export class CommomAreasModule {}

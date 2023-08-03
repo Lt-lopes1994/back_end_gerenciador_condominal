@@ -2,6 +2,11 @@ import * as mongoose from 'mongoose';
 
 export const SpaceReservationSchema = new mongoose.Schema(
     {
+        commonAreaId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'CommonArea',
+            required: true,
+        },
         date:{ 
             type: Date, 
             require: true, 
