@@ -14,9 +14,9 @@ export class CommomAreasService {
   ) {}
 
   async create(createCommomAreaDto: CreateCommomAreaDto): Promise<ResultDto> {
-    const { name, condominiumId, description } = createCommomAreaDto;
+    const { name, condominiumId, description, urlImage } = createCommomAreaDto;
 
-    if (!name || !condominiumId || !description) {
+    if (!name || !condominiumId || !description || !urlImage) {
       throw new BadRequestException('Todos os campos são obrigatórios');
     }
 

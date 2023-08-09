@@ -5,4 +5,5 @@ export class UpdateCommomAreaDto extends PartialType(CreateCommomAreaDto) {
   name?: string;
   description?: string;
   activebit?: boolean;
+  urlImage?: string;
 }
