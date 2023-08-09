@@ -65,8 +65,15 @@ export class SpaceReservationService {
     return await this.spaceReservationModel.find().exec();
   }
 
-  async findOneId(id: string): Promise<ReturnSpaceReservationDto | undefined> {
-    return await this.spaceReservationModel.findOne({ _id: id }).exec();
+  async findOneId(_id: string): Promise<ReturnSpaceReservationDto> {
+    console.log('service id', _id);
+
+    const foundReservation = await this.spaceReservationModel
+      .findOne()
+      .where({ commonAreaId: _id, activebit: true })
+      .exec();
+
+    return foundReservation;
   }
 
   async update(
