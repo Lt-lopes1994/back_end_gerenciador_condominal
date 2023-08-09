@@ -31,9 +31,11 @@ export class SpaceReservationController {
     return await this.spaceReservationService.findAll();
   }
 
-  @Get('/list/:id')
-  async findOne(@Param('id') id: string) {
-    return await this.spaceReservationService.findOneId(id);
+  @Get('/list/:_id')
+  async findOne(@Param('_id') _id: string) {
+    console.log('controller id', _id);
+
+    return await this.spaceReservationService.findOneId(_id);
   }
 
   @Patch('update/:id')
