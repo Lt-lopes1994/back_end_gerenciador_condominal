@@ -8,6 +8,7 @@ export const CommomAreaSchema = new mongoose.Schema(
       ref: 'Condominium',
       required: true,
     },
+    urlImage: { type: String, required: true },
     description: { type: String, required: true },
     activebit: { type: Boolean, required: true, default: true },
   },
