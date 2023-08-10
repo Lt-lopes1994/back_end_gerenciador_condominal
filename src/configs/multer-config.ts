@@ -18,7 +18,6 @@ const multerConfig = {
         s3: s3Config,
         bucket: process.env.BUCKET_NAME,
         contentType: multerS3.AUTO_CONTENT_TYPE,
-        acl: 'private',
         key: (req, file, cb) => {
             const fileName =
                 path.parse(file.originalname).name.replace(/\s/g, '') + '-' + uuidv4();

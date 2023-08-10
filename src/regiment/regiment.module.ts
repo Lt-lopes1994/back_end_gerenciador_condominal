@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { S3 } from 'aws-sdk';
 import { RegimentSchema } from './entities/regiment.schema';
 import { RegimentController } from './regiment.controller';
 import { RegimentService } from './regiment.service';
@@ -13,6 +14,6 @@ import { RegimentService } from './regiment.service';
     ])
   ],
   controllers: [RegimentController],
-  providers: [RegimentService]
+  providers: [RegimentService, S3]
 })
 export class RegimentModule { }
