@@ -2,10 +2,9 @@ import { BadRequestException, Controller, Get, Param, Post, Res, UploadedFile, U
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import multerConfig from 'src/configs/multer-config';
-import { ResultDto } from 'src/dto/result.dto';
 import { CreateRegimentDto } from './dto/create-regiment.dto';
 import { RegimentService } from './regiment.service';
-import { fileFilter } from './utils/file-upload.utils';
+
 
 @Controller('regimento')
 export class RegimentController {
@@ -25,8 +24,8 @@ export class RegimentController {
     return this.regimentService.uploadFile(file);
   }
 
-  @Get(':fileName')
-  async downloadFile(@Param('fileName') fileName: string, @Res() res: Response): Promise<void> {
-    return this.downloadFile(fileName, res);
+  @Get(':name')
+  async download(@Param('name') name: string, @Res() res: Response): Promise<void | string> {
+    return this.regimentService.downloadFile(name, res);
   }
 }

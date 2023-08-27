@@ -6,19 +6,20 @@ import { v4 as uuidv4 } from 'uuid';
 dotenv.config();
 
 const s3Config = new S3Client({
-    region: 'us-east-2',
+    endpoint: 'https://s3.us-east-005.backblazeb2.com',
+    region: 'us-east-005',
     credentials: {
-        accessKeyId: process.env.BUCKET_ACCESSKEY,
+        accessKeyId: process.env.BUCKET_KEYID,
         secretAccessKey: process.env.BUCKET_SECRETKEY,
-    },
+    }
 });
 
 const multerConfig = {
     storage: multerS3({
         s3: s3Config,
-        bucket: process.env.BUCKET_NAME,
+        bucket: process.env.BUCKET_KEYNAME,
+        acl: 'public-read',
         contentType: multerS3.AUTO_CONTENT_TYPE,
-        acl: 'private',
         key: (req, file, cb) => {
             const fileName =
                 path.parse(file.originalname).name.replace(/\s/g, '') + '-' + uuidv4();
