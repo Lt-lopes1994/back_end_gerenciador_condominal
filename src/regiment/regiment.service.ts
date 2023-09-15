@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import * as dotenv from 'dotenv';
 import { Response } from 'express';
 import { Model } from 'mongoose';
+import { RegimentDto } from './dto/regiment.dto';
 import { Regiment } from './entities/regiment.entity';
 dotenv.config();
 
@@ -24,13 +25,35 @@ export class RegimentService {
     return newFile.save();
   }
 
-  async downloadFile(name: string, res: Response): Promise<void | string> {
-    const textFile = await this.regiment.findOne({ fileName: name });
+  // async downloadFile(name: string, res: Response): Promise<void | any> {
+  //   const textFile = await this.regiment.findOne({ fileName: name });
 
-    if (!textFile) {
+  //   const file = await this.regiment.find()
+
+  //   // if (!textFile) {
+  //   //   throw new NotFoundException('Arquivo não encontrado.');
+  //   // }
+
+  //   // return res.redirect(textFile.url)
+  // }
+
+  async downloadFile(): Promise<void | string> {
+    const file = await this.regiment.find();
+
+    if (file.length < 1) {
       throw new NotFoundException('Arquivo não encontrado.');
     }
 
-    return res.redirect(textFile.url)
+    const foundFile = file[file.length - 1];
+
+    const returnFile: RegimentDto = {
+      fileName: foundFile.fileName,
+      size: foundFile.size,
+      contentType: foundFile.contentType,
+      url: foundFile.url,
+      createdAt: foundFile.createdAt
+    }
+
+    return returnFile.url;
   }
 }
