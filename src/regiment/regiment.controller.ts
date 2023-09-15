@@ -24,8 +24,13 @@ export class RegimentController {
     return this.regimentService.uploadFile(file);
   }
 
-  @Get(':name')
-  async download(@Param('name') name: string, @Res() res: Response): Promise<void | string> {
-    return this.regimentService.downloadFile(name, res);
+  // @Get(':name')
+  // async download(@Param('name') name: string, @Res() res: Response): Promise<void | any> {
+  //   return this.regimentService.downloadFile(name, res);
+  // }
+
+  @Get()
+  async download(): Promise<void | string> {
+    return this.regimentService.downloadFile();
   }
 }
