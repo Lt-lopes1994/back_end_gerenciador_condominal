@@ -1,28 +1,35 @@
+import { MailerService } from '@nestjs-modules/mailer';
 import {
   BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import * as bcrypt from 'bcrypt';
+import { Model } from 'mongoose';
+import { ReturnUserDto } from 'src/dto/returnUser.dto';
+import { SharedService } from 'src/shared/shared.service';
+import Stripe from 'stripe';
+import { ResultDto } from '../dto/result.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { ReturnUserDto } from 'src/dto/returnUser.dto';
-import { ResultDto } from '../dto/result.dto';
-import * as bcrypt from 'bcrypt';
-import { MailerService } from '@nestjs-modules/mailer';
-import { SharedService } from 'src/shared/shared.service';
 
 @Injectable()
 export class UsersService {
+  private stripe;
+
   constructor(
     @InjectModel('User')
     private readonly userModel: Model<User>,
     private readonly sharedService: SharedService,
     private mailService: MailerService
-  ) { }
+  ) {
+    this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: '2023-08-16'
+    });
+  }
 
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -76,6 +83,10 @@ export class UsersService {
     );
 
     const newUser = new this.userModel(createUserDto);
+    await this.stripe.customers.create({
+      name: createUserDto.name,
+      email: createUserDto.email
+    })
 
     return await newUser.save();
   }
