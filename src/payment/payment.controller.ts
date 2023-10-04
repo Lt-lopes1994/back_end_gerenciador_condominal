@@ -22,4 +22,17 @@ export class PaymentController {
       return error
     }
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('listar-boletos/:id')
+  async listAllInvoices(@Param('id') id: string) {
+    try {
+      const token = await this.usersService.findOneId(id);
+      const user = await this.paymentService.getUser(token.email);
+
+      return this.paymentService.getAllInvoices(user.data[0].id);
+    } catch (error) {
+      return error
+    }
+  }
 }

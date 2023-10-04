@@ -28,7 +28,7 @@ export class PaymentService {
 
         const sendInvoice = await this.stripe.invoices.sendInvoice(invoice.id);
 
-        return sendInvoice
+        return sendInvoice;
     }
 
     async getUser(email: string) {
@@ -37,5 +37,24 @@ export class PaymentService {
         })
 
         return user;
+    }
+
+    async getAllInvoices(id: string) {
+        const invoices = await this.stripe.invoices.list({
+            customer: id,
+            status: 'open'
+        });
+
+        return invoices;
+    }
+
+    async updateCustomer(id: string, email: string) {
+        const customer = await this.stripe.customers.update(
+            id, {
+            email
+        }
+        );
+
+        return customer;
     }
 }

@@ -146,6 +146,9 @@ export class UsersService {
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<ResultDto> {
     const foundUser = await this.userModel.findOne({ _id: id }).exec();
+    const stripeUser = await this.stripe.customers.search({
+      query: `email: '${foundUser.email}'`
+    })
 
     if (!foundUser) {
       throw new NotFoundException('Usuário não encontrado');
@@ -165,6 +168,12 @@ export class UsersService {
 
     if (updateUserDto.email) {
       foundUser.email = updateUserDto.email;
+      await this.stripe.customers.update(
+        stripeUser.data[0].id,
+        {
+          email: updateUserDto.email
+        }
+      )
     }
 
     if (updateUserDto.door) {
@@ -180,7 +189,7 @@ export class UsersService {
     return {
       message: 'Usuário atualizado com sucesso',
       status: 200,
-    };
+    }
   }
 
   async updateRole(id: string, userRole: UpdateUserDto): Promise<ResultDto> {
