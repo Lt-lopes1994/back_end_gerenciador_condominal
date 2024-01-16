@@ -10,12 +10,12 @@ import { AuthModule } from './auth/auth.module';
 import { CommomAreasModule } from './commom-areas/commom-areas.module';
 import { CondominiumModule } from './condominium/condominium.module';
 import { NewsModule } from './news/news.module';
-import { PaymentController } from './payment/payment.controller';
 import { PaymentModule } from './payment/payment.module';
 import { RegimentModule } from './regiment/regiment.module';
 import { SharedModule } from './shared/shared.module';
 import { SpaceReservationModule } from './space-reservation/space-reservation.module';
 import { TokenModule } from './token/token.module';
+import { VisitorsModule } from './visitors/visitors.module';
 
 @Module({
   imports: [
@@ -51,6 +51,7 @@ import { TokenModule } from './token/token.module';
     CommomAreasModule,
     RegimentModule,
     PaymentModule,
+    VisitorsModule,
   ],
   controllers: [],
   providers: [],
