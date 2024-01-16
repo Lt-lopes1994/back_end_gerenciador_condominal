@@ -15,6 +15,7 @@ export const VisitorSchema = new mongoose.Schema(
         tower_visited: { type: String, required: true },
         visitor_photo: { type: String, required: true },
         activebit: { type: Boolean, required: true, default: true },
+        expireAt: { type: Date, expires: 0 }
     },
     { timestamps: true, collection: 'visitors' },
 );

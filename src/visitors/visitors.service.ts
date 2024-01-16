@@ -38,6 +38,8 @@ export class VisitorsService {
     }
 
     const departureDate = new Date(departure_date);
+    const setExpirationDate = Date.now() + 24 * 60 * 60 * 1000;
+    const expirationDate = new Date(setExpirationDate);
 
     if (isNaN(departureDate.getTime())) {
       throw new BadRequestException('A data de partida é inválida.');
@@ -52,6 +54,7 @@ export class VisitorsService {
       door_visited,
       tower_visited,
       visitor_photo,
+      expireAt: expirationDate.toISOString()
     });
 
     return await newVisitor.save();
