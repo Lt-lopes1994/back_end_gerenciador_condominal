@@ -10,6 +10,11 @@ export const SupportSchema = new mongoose.Schema(
         title: { type: String, required: true },
         text_area: { type: String, required: true },
         solved: { type: Boolean, default: false },
+        ticket_number: {
+            type: Number,
+            required: true,
+            unique: true
+        },
     },
     { timestamps: true, collection: 'support' },
 );
