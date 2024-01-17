@@ -9,4 +9,5 @@ export class Support extends Document {
     readonly title: string;
     readonly text_area: string;
     readonly solved: boolean;
+    readonly ticket_number: number;
 }

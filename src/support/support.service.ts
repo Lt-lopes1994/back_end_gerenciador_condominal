@@ -40,20 +40,26 @@ export class SupportService {
       throw new BadRequestException('Todos os campos são obrigatórios!');
     }
 
+    const codeGenerator = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+
+    createSupportDto.ticket_number = Number(codeGenerator);
+
+    const ticket = new this.supportModel(createSupportDto);
+
+    await ticket.save();
+
     await this.mailService.sendMail({
       to: email.trim(),
       subject: title,
       template: 'support',
       context: {
         email: {
-          name: name
+          name: name,
+          ticketNumber: createSupportDto.ticket_number,
+          date: new Date().toLocaleDateString(),
         }
       }
     });
-
-    const ticket = new this.supportModel(createSupportDto);
-
-    await ticket.save();
 
     return {
       message: 'Seu ticket foi criado com sucesso',

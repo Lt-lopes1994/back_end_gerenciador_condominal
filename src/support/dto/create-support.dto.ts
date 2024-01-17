@@ -6,4 +6,5 @@ export class CreateSupportDto {
     readonly door: number;
     readonly title: string;
     readonly text_area: string;
+    ticket_number: number;
 }
