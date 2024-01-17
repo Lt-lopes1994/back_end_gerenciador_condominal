@@ -16,6 +16,7 @@ import { SharedModule } from './shared/shared.module';
 import { SpaceReservationModule } from './space-reservation/space-reservation.module';
 import { TokenModule } from './token/token.module';
 import { VisitorsModule } from './visitors/visitors.module';
+import { SupportModule } from './support/support.module';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { VisitorsModule } from './visitors/visitors.module';
     RegimentModule,
     PaymentModule,
     VisitorsModule,
+    SupportModule,
   ],
   controllers: [],
   providers: [],
