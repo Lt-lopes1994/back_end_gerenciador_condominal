@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger/dist';
+import { VisitorPictureDto } from './visitor-picture.dto';
 
 export class CreateVisitorDto {
     @ApiProperty({
@@ -20,7 +21,7 @@ export class CreateVisitorDto {
         description: 'Data de saída do visitante',
         example: '28-01-2021',
     })
-    readonly departure_date: Date;
+    readonly departure_date?: Date;
 
     @ApiProperty({
         type: 'string',
@@ -53,9 +54,13 @@ export class CreateVisitorDto {
     @ApiProperty({
         type: 'string',
         description: 'Foto do visitante',
-        example: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istoedinheiro.com.br%2Fcpf%2F&psig=AOvVaw0Q7WYR8bXbQfQ0W7U1c4wV&ust=1611920115788000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCJjR9ZqWiu4CFQAAAAAdAAAAABAD',
+        example: {
+            name: 'image.jpg',
+            key: '1234567890',
+            url: 'http://localhost:3000/files/1234567890',
+        },
     })
-    readonly visitor_photo: string;
+    readonly visitor_photo?: VisitorPictureDto;
 
     @ApiProperty({
         type: 'string',
